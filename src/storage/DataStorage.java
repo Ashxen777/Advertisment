@@ -26,7 +26,7 @@ public class DataStorage implements Serializable {
     public void add(Item item) throws IOException {
         item.setId(itemId++);
         items.add(item);
-//        FileUtil.serializeItemList( items);
+       FileUtil.serializeItemList( items);
    }
 
 
@@ -112,7 +112,7 @@ public class DataStorage implements Serializable {
 
     }
 
-    public void initData(User currentUser) throws IOException, ClassNotFoundException {
+    public void initData() throws IOException, ClassNotFoundException {
         userMap = deserializeUserMap();
         items =  deserializeItem();
     }

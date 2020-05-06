@@ -4,8 +4,11 @@ import model.Item;
 import model.User;
 
 import java.io.*;
+
 import storage.DataStorage;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +40,7 @@ public class FileUtil {
     }
 
     public static Map<String, User> deserializeUserMap() throws IOException {
-        Map<String, User> userM = null;
+        Map<String, User> userM = new HashMap<>();
 
         try {
 
@@ -47,7 +50,7 @@ public class FileUtil {
             objectInputStream.close();
 
 
-        } catch (ClassNotFoundException |EOFException e) {
+        } catch (ClassNotFoundException | EOFException e) {
             e.printStackTrace();
         }
 
@@ -55,19 +58,20 @@ public class FileUtil {
     }
 
     public static void serializeItemList(List<Item> item) throws IOException {
-        ObjectOutput objectOutput=new ObjectOutputStream(new FileOutputStream(FILE_PATH1));
+        ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream(FILE_PATH1));
         objectOutput.writeObject(item);
         objectOutput.close();
     }
 
     public static List<Item> deserializeItem() throws IOException {
-        List<Item> items=null;
+        List<Item> items = new ArrayList<>();
         try {
-            ObjectInputStream objectInputStream=new ObjectInputStream(new FileInputStream(FILE_PATH1));
-            Object deserialize=objectInputStream.readObject();
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(FILE_PATH1));
+            Object deserialize = objectInputStream.readObject();
             items = (List<Item>) deserialize;
             objectInputStream.close();
-        }catch ( ClassNotFoundException |EOFException e) {
+
+        } catch (ClassNotFoundException | EOFException e) {
             e.printStackTrace();
         }
         return items;

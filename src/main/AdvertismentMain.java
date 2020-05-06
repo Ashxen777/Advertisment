@@ -1,6 +1,5 @@
 package main;
 
-import javafx.scene.chart.ScatterChart;
 import model.Category;
 import model.Gender;
 import model.Item;
@@ -8,7 +7,6 @@ import model.User;
 import storage.DataStorage;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
@@ -18,13 +16,12 @@ public class AdvertismentMain implements Commands {
     private static Scanner scanner = new Scanner(System.in);
     private static DataStorage dataStorage = new DataStorage();
     private static User currentUser=null;
-    private static Item item=null;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         dataStorage.addUser(new User("as","yan",21,Gender.FEMALE,"2211","2233"));
         dataStorage.addUser(new User("asa","yan",71,Gender.MALE,"5544","5566"));
-        dataStorage.initData(currentUser);
+        dataStorage.initData();
         boolean isRun = true;
         while (isRun) {
             Commands.printMainCommands();
