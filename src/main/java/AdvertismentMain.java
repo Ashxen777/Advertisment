@@ -1,9 +1,16 @@
-package main;
+
+import commands.Commands;
 
 import model.Category;
 import model.Gender;
 import model.Item;
 import model.User;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import storage.DataStorage;
 
 import java.io.IOException;
@@ -40,6 +47,9 @@ public class AdvertismentMain implements Commands {
                 case REGISTER:
                     registerUser();
                     break;
+                case IMPORT_USERS:
+                    importFromXlsx();
+                    break;
                 default:
                     System.out.println("Wrong Commands");
             }
@@ -47,6 +57,44 @@ public class AdvertismentMain implements Commands {
 
         }
 
+    }
+
+    private static void importFromXlsx() {
+        System.out.println("Please select xlsx path");
+        String xlsxPath = scanner.nextLine();
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
+            Sheet sheet = workbook.getSheetAt(0);
+            int lastRowNum = sheet.getLastRowNum();
+            for (int i = 1; i <=lastRowNum; i++) {
+                Row row = sheet.getRow(i);
+                String name = row.getCell(0).getStringCellValue();
+                String surname = row.getCell(1).getStringCellValue();
+                Double age = row.getCell(2).getNumericCellValue();
+
+                Gender gender = Gender.valueOf(row.getCell(3).getStringCellValue());
+                Cell phoneNumber=row.getCell(4);
+                String phoneNumberStr= phoneNumber.getCellType() == CellType.NUMERIC ?
+                        String.valueOf(Double.valueOf( phoneNumber.getNumericCellValue()).intValue()) :  phoneNumber.getStringCellValue();
+                Cell password = row.getCell(5);
+                String passwordStr= password.getCellType() == CellType.NUMERIC ?
+                        String.valueOf(Double.valueOf(password.getNumericCellValue()).intValue() ) :  password.getStringCellValue();
+                User user = new User();
+                user.setName(name);
+                user.setSurname(surname);
+                user.setAge(age.intValue());
+                user.setGender(gender);
+                user.setPhoneNumber(phoneNumberStr);
+                user.setPassword(passwordStr);
+                System.out.println(user);
+                dataStorage.addUser(user);
+                System.out.println("Import was success!");
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error while importing users");
+        }
     }
 
     private static void registerUser() {
@@ -91,7 +139,7 @@ public class AdvertismentMain implements Commands {
             } else {
                 System.out.println("Wrong phoneNumber or password");
             }
-        } catch (ArrayIndexOutOfBoundsException  e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Wrong Data");
         }
 

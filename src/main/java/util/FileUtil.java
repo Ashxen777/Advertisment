@@ -30,8 +30,8 @@ import java.util.Map;
 // վերադարձրած օբյեկտները կվերագրենք մեր գլոբալ օբյեկտներին։
 //Այսինքն իրանք էլ դատարկ չեն լինի։
 public class FileUtil {
-    private static final String USER_PATH = "src\\util\\userMap.obj";
-    private static final String ITEM_PATH = "src\\util\\itemList.obj";
+    private static final String USER_PATH = "src\\main\\resources\\userMap.obj";
+    private static final String ITEM_PATH = "src\\main\\resources\\itemList.obj";
 
     public static void serializeUserMap(Map<String, User> userMap) {
         File userMapFile = new File(USER_PATH);

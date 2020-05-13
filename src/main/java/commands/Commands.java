@@ -1,9 +1,10 @@
-package main;
+package commands;
 
 public interface Commands {
     int EXIT=0;
     int LOGIN=1;
     int REGISTER=2;
+    int IMPORT_USERS=3;
 
     int LOGOUT=0;
     int ADD_NEW_AD=1;
@@ -19,6 +20,7 @@ public interface Commands {
         System.out.println("Please input "+EXIT+" for EXIT");
         System.out.println("Please input "+LOGIN+" for LOGIN");
         System.out.println("Please input "+REGISTER+" for REGISTER");
+        System.out.println("Please input "+IMPORT_USERS+" for IMPORT_USERS");
     }
 
     static void printUserCommands(){
