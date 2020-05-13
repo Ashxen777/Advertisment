@@ -5,25 +5,25 @@ import model.Item;
 import model.User;
 import util.FileUtil;
 
-import java.io.IOException;
-import java.io.Serializable;
+
+
 import java.util.*;
 
-import static util.FileUtil.*;
 
 
-public class DataStorage implements Serializable {
+
+public class DataStorage {
     private static long itemId = 1;
     private Map<String, User> userMap = new HashMap<>();
     private List<Item> items = new ArrayList<>();
 
 
-    public void addUser(User user) throws IOException {
+    public void addUser(User user)  {
         userMap.put(user.getPhoneNumber(), user);
         FileUtil.serializeUserMap(userMap);
     }
 
-    public void add(Item item) throws IOException {
+    public void add(Item item)  {
         item.setId(itemId++);
         items.add(item);
        FileUtil.serializeItemList( items);
@@ -88,7 +88,7 @@ public class DataStorage implements Serializable {
         }
     }
 
-    public void deleteItemByUser(User user) throws IOException {
+    public void deleteItemByUser(User user) {
 
         Iterator<Item> iterator = items.iterator();
         while (iterator.hasNext()) {
@@ -97,7 +97,7 @@ public class DataStorage implements Serializable {
                 iterator.remove();
             }
         }
-        serializeItemList(items);
+        FileUtil.serializeItemList(items);
 //        items.removeIf(item -> item.getUser().equals(user));
 //        for (Item item : items) {
 //            if (item.getUser().equals(user))
@@ -106,15 +106,19 @@ public class DataStorage implements Serializable {
 
     }
 
-    public void deleteItemById(long id) throws IOException {
+    public void deleteItemById(long id){
         items.remove(getItemByID(id));
-        serializeItemList(items);
+        FileUtil.serializeItemList(items);
 
     }
 
-    public void initData() throws IOException, ClassNotFoundException {
-        userMap = deserializeUserMap();
-        items =  deserializeItem();
+    public void initData()  {
+        userMap = FileUtil.deserializeUserMap();
+        items =  FileUtil.deserializeItem();
+if (items!=null && !items.isEmpty()) {
+    Item item = items.get(items.size() - 1);
+    itemId=item.getId()+1;
+}
     }
 
 

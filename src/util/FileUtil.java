@@ -30,50 +30,74 @@ import java.util.Map;
 // վերադարձրած օբյեկտները կվերագրենք մեր գլոբալ օբյեկտներին։
 //Այսինքն իրանք էլ դատարկ չեն լինի։
 public class FileUtil {
-    private static final String FILE_PATH = "C:\\Users\\user\\IntellijProekt\\Advertisment\\src\\util\\user.txt";
-    private static final String FILE_PATH1 = "C:\\Users\\user\\IntellijProekt\\Advertisment\\src\\util\\item.txt";
+    private static final String USER_PATH = "src\\util\\userMap.obj";
+    private static final String ITEM_PATH = "src\\util\\itemList.obj";
 
-    public static void serializeUserMap(Map<String, User> userMap) throws IOException {
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
-        outputStream.writeObject(userMap);
-        outputStream.close();
-    }
-
-    public static Map<String, User> deserializeUserMap() throws IOException {
-        Map<String, User> userM = new HashMap<>();
-
+    public static void serializeUserMap(Map<String, User> userMap) {
+        File userMapFile = new File(USER_PATH);
         try {
 
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(FILE_PATH));
-            Object deserialize = objectInputStream.readObject();
-            userM = (Map<String, User>) deserialize;
-            objectInputStream.close();
+
+            if (!userMapFile.exists()) {
+                userMapFile.createNewFile();
+            }
+            try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(USER_PATH))) {
+                outputStream.writeObject(userMap);
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
 
 
-        } catch (ClassNotFoundException | EOFException e) {
-            e.printStackTrace();
+    public static Map<String, User> deserializeUserMap() {
+        Map<String, User> userM = new HashMap<>();
+        File userMapFile = new File(USER_PATH);
+        if (userMapFile.exists()){
+            try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(USER_PATH))) {
+                Object deserialize = objectInputStream.readObject();
+                return (Map<String, User>) deserialize;
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         return userM;
     }
 
-    public static void serializeItemList(List<Item> item) throws IOException {
-        ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream(FILE_PATH1));
-        objectOutput.writeObject(item);
-        objectOutput.close();
-    }
-
-    public static List<Item> deserializeItem() throws IOException {
-        List<Item> items = new ArrayList<>();
+    public static void serializeItemList(List<Item> item) {
+        File itemListFile = new File(ITEM_PATH);
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(FILE_PATH1));
-            Object deserialize = objectInputStream.readObject();
-            items = (List<Item>) deserialize;
-            objectInputStream.close();
 
-        } catch (ClassNotFoundException | EOFException e) {
+
+            if (!itemListFile.exists()) {
+                itemListFile.createNewFile();
+            }
+            try (ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream(ITEM_PATH))) {
+                objectOutput.writeObject(item);
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Item> deserializeItem() {
+        List<Item> items = new ArrayList<>();
+        File itemListFile = new File(ITEM_PATH);
+        if (itemListFile.exists()){
+            try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(ITEM_PATH))) {
+                Object deserialize = objectInputStream.readObject();
+                return (List<Item>) deserialize;
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
         return items;
     }
 }

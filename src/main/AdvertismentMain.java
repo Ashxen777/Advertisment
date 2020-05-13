@@ -15,12 +15,11 @@ public class AdvertismentMain implements Commands {
 
     private static Scanner scanner = new Scanner(System.in);
     private static DataStorage dataStorage = new DataStorage();
-    private static User currentUser=null;
+    private static User currentUser = null;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) {
 
-        dataStorage.addUser(new User("as","yan",21,Gender.FEMALE,"2211","2233"));
-        dataStorage.addUser(new User("asa","yan",71,Gender.MALE,"5544","5566"));
+
         dataStorage.initData();
         boolean isRun = true;
         while (isRun) {
@@ -44,6 +43,7 @@ public class AdvertismentMain implements Commands {
                 default:
                     System.out.println("Wrong Commands");
             }
+
 
         }
 
@@ -71,9 +71,8 @@ public class AdvertismentMain implements Commands {
 
             } else
                 System.out.println("User already exists!");
-        } catch (ArrayIndexOutOfBoundsException | IOException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Wrong Data");
-
 
 
         }
@@ -92,13 +91,13 @@ public class AdvertismentMain implements Commands {
             } else {
                 System.out.println("Wrong phoneNumber or password");
             }
-        } catch (ArrayIndexOutOfBoundsException | IOException e) {
+        } catch (ArrayIndexOutOfBoundsException  e) {
             System.out.println("Wrong Data");
         }
 
     }
 
-    private static void loginSuccess() throws IOException {
+    private static void loginSuccess() {
 
         System.out.println("Welcome " + currentUser.getName() + " !");
         boolean isRun = true;
@@ -127,8 +126,8 @@ public class AdvertismentMain implements Commands {
                     printAllBycategory();
                     break;
                 case PRINT_ALL_ADS_SORT_BY_TITLE:
-               dataStorage.printItemsOrderByTitle();
-                break;
+                    dataStorage.printItemsOrderByTitle();
+                    break;
                 case PRINT_ALL_ADS_SORT_BY_DATE:
                     dataStorage.printItemsOrderByDate();
                     break;
@@ -145,23 +144,17 @@ public class AdvertismentMain implements Commands {
         }
     }
 
-    private static void deleteById()   {
-        try {
+    private static void deleteById() {
 
-
-            System.out.println("Please choose id from list");
-            dataStorage.printItemsByUser(currentUser);
-            long id = Long.parseLong(scanner.nextLine());
-            Item itemByID = dataStorage.getItemByID(id);
-            if (itemByID != null && itemByID.getUser().equals(currentUser)) {
-                dataStorage.deleteItemById(id);
-            } else {
-                System.out.println("Wrong Id!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        System.out.println("Please choose id from list");
+        dataStorage.printItemsByUser(currentUser);
+        long id = Long.parseLong(scanner.nextLine());
+        Item itemByID = dataStorage.getItemByID(id);
+        if (itemByID != null && itemByID.getUser().equals(currentUser)) {
+            dataStorage.deleteItemById(id);
+        } else {
+            System.out.println("Wrong Id!");
         }
-
     }
 
     private static void printAllBycategory() {
@@ -171,7 +164,7 @@ public class AdvertismentMain implements Commands {
             String categoryStr = scanner.nextLine().toUpperCase();
             Category category = Category.valueOf(categoryStr);
             dataStorage.printItemsByCategory(category);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Wrong category");
 
         }
@@ -184,18 +177,18 @@ public class AdvertismentMain implements Commands {
         try {
 
 
-        String itemDataStr = scanner.nextLine();
-        String[] itemData = itemDataStr.split(",");
-        Item item = new Item();
-        item.setTitle(itemData[0]);
-        item.setText( itemData[1]);
-        item.setPrice(Double.parseDouble(itemData[2]));
-        item.setUser(currentUser);
-        item.setCategory(Category.valueOf(itemData[3].toUpperCase()));
-        item.setCreatedDate(new Date());
-        dataStorage.add(item);
+            String itemDataStr = scanner.nextLine();
+            String[] itemData = itemDataStr.split(",");
+            Item item = new Item();
+            item.setTitle(itemData[0]);
+            item.setText(itemData[1]);
+            item.setPrice(Double.parseDouble(itemData[2]));
+            item.setUser(currentUser);
+            item.setCategory(Category.valueOf(itemData[3].toUpperCase()));
+            item.setCreatedDate(new Date());
+            dataStorage.add(item);
             System.out.println("Item was successfully added");
-    }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Wrong Data!");
         }
     }
